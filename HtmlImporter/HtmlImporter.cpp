@@ -91,7 +91,7 @@ int main()
 		for (auto tag : atag)
 		{
 			std::vector<attribute> v_attr;
-			tag->get_attribute(v_attr);
+			tag->get_attributes(v_attr);
 			for (auto attr : v_attr)
 			{
 				std::cout << attr.name << "=" << attr.value << std::endl;
@@ -102,7 +102,7 @@ int main()
 	std::cout << "----------------------" << std::endl;
 	
 	// resume.html
-	std::vector<Dom*> btag = future[1].get()->find_all("div");
+	std::vector<Dom*> btag = future[1].get()->find_all("script");
 	if (btag.size() > 0)
 	{
 		for (auto tag : btag)
@@ -110,16 +110,19 @@ int main()
 			std::vector<attribute> v_attr;
 			
 			std::cout << "tag name: " << tag->get_name() << std::endl;
-			tag->get_attribute(v_attr);
+			tag->get_attributes(v_attr);
 			for (auto attr : v_attr)
 			{
-				std::cout << "\t" << attr.name << "=" << attr.value << std::endl;
+				if (attr.name == "src") {
+					std::cout << "\t" << attr.value << std::endl;
+				}
 			}
 		}
 	}
 
 	pool.shutdown();
-
+	
+	std::cout << "----------------------" << std::endl;
 	std::cout << "Done!" << std::endl;
 
 	return 0;

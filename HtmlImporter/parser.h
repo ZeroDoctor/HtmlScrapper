@@ -13,6 +13,7 @@ bool parse_html(std::vector<std::string>& result, std::string str, char delim, c
 		return false;
 	}
 
+
 	int excpt_found = 0;
 	int prev = 0;
 
@@ -144,6 +145,21 @@ genericTag parse_tag(std::string tag)
 }
 
 // creates dom tree
+
+/**
+	Limitation:
+		- every void element needs the '/' character ex. <img />, <meta />, etc.
+		- will not work if '>' is found on the next line. ex:
+			<div
+			class="something"
+			id="anotherthing"
+			>
+
+	TODO:
+		- create a list of void elements
+		- check if potential tags match a void element
+		- continue until '>' is found even on the next line or if another '<' is occurs
+*/
 Dom* create_dom(std::vector<std::string> lines)
 {
 	std::vector<std::string> parse_line;
@@ -169,6 +185,7 @@ Dom* create_dom(std::vector<std::string> lines)
 
 				if (tag.is_start)
 				{
+					//std::cout << "start: " << tag.name << std::endl;
 					current_dom = new Dom(tag, last_dom);
 					current_dom->start_linenum = i;
 					if (last_dom != NULL)
@@ -180,6 +197,7 @@ Dom* create_dom(std::vector<std::string> lines)
 				}
 				else if (last_dom != NULL && ("/" + last_dom->get_name()) == tag.name)
 				{
+					//std::cout << "end: " << tag.name << std::endl;
 					last_dom->end_linenum = i;
 					tag.content += content;
 					content = "";

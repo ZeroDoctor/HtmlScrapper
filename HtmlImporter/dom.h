@@ -32,7 +32,8 @@ public:
 
 	std::string get_name();
 	std::vector<Dom*> get_children();
-	bool get_attribute(std::vector<attribute>& attr);
+	bool get_attributes(std::vector<attribute>& attr);
+	bool get_content(std::string& content);
 	Dom* get_parent();
 
 	~Dom();
@@ -92,7 +93,7 @@ std::vector<Dom*> Dom::get_children()
 	return result;
 }
 
-bool Dom::get_attribute(std::vector<attribute>& attrs)
+bool Dom::get_attributes(std::vector<attribute>& attrs)
 {
 	try
 	{
@@ -109,6 +110,26 @@ bool Dom::get_attribute(std::vector<attribute>& attrs)
 	
 
 	return true;
+}
+
+bool Dom::get_content(std::string& content)
+{
+
+	try
+	{
+		if (self.content != "")
+		{
+			content = self.content;
+			return true;
+		}
+	} 
+	catch (std::exception & e)
+	{
+		std::cout << "Exception: " << e.what();
+		return false;
+	}
+
+	return false;
 }
 
 Dom::~Dom()
